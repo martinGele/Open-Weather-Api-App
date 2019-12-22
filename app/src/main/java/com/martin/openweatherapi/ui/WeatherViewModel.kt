@@ -23,15 +23,13 @@ class WeatherViewModel @Inject constructor(private val weatherApiService: Weathe
     private val disposable = CompositeDisposable()
 
 
-    fun showDataByLocation(location:String?) {
+    fun showDataByLocation(location: String?) {
         loading.value = true
-
-
         getWeatherByLocation(location)
     }
 
 
-    fun getWeatherByLocation(location:String?) {
+    fun getWeatherByLocation(location: String?) {
         disposable.add(
             weatherApiService.getWeatherCity(location!!, API_KEY)
                 .subscribeOn(Schedulers.newThread())
@@ -50,14 +48,39 @@ class WeatherViewModel @Inject constructor(private val weatherApiService: Weathe
                         loading.value = false
                         loadError.value = true
                         weatherLiveData.value = null
-                    }
-
-                })
-
-
+                    } })
         )
     }
 
+
+    fun showDataByGeoLocation(lat: String?,lon:String?) {
+        loading.value = true
+        showWeatheGeoLocation(lat,lon)
+    }
+
+
+
+    fun showWeatheGeoLocation(lat:String?,lon:String?){
+        disposable.addAll(
+             weatherApiService.getWeatherGeo(lat!!,lon!!, API_KEY)
+                 .subscribeOn(Schedulers.newThread())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribeWith(object : DisposableSingleObserver<Weather>(){
+                     override fun onSuccess(weather: Weather) {
+                         Log.d("getData", weather.toString())
+                         loadError.value = false
+                         weatherLiveData.value = weather
+                         loading.value = false
+                     }
+
+                     override fun onError(e: Throwable) {
+                         e.printStackTrace()
+                         loading.value = false
+                         loadError.value = true
+                         weatherLiveData.value = null                     }
+                 })
+        )
+    }
 
     override fun onCleared() {
         super.onCleared()

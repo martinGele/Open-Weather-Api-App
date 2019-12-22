@@ -3,6 +3,7 @@ package com.martin.openweatherapi.binding
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -46,5 +47,23 @@ fun ImageView.loadImage(image: List<WeatherX>?, progressDrawable: CircularProgre
 //        .setDefaultRequestOptions(options)
         .load("http://openweathermap.org/img/wn/$iconWeather@2x.png")
         .into(this)
+
+}
+
+
+@BindingAdapter("android:loadDescritpion")
+fun loadDescription(view: TextView, text: List<WeatherX>?) {
+    view.setDesctiption(text)
+
+}
+
+fun TextView.setDesctiption(textString: List<WeatherX>?){
+
+    var text_final:String= ""
+    textString?.forEach {
+        text_final = it.description
+    }
+    text=text_final
+
 
 }
