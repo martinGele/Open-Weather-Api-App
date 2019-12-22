@@ -18,9 +18,9 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
-
+            app:iconifiedByDefault="false"
             android:background="@color/searchBackground"
-            app:queryHint="@string/enter_city"
+            app:queryHint="@{viewModel.weatherLiveData.name}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="16dp"

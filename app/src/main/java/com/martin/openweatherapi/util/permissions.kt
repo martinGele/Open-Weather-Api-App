@@ -1,10 +1,12 @@
 package com.martin.openweatherapi.util
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
 
 fun isLocationEnabled(context: Context): Boolean {
     var locationManager: LocationManager =
@@ -14,14 +16,14 @@ fun isLocationEnabled(context: Context): Boolean {
     )
 }
 
-fun checkPermissions(context: Activity): Boolean {
+fun checkPermissions(context: Context): Boolean {
     if (ActivityCompat.checkSelfPermission(
             context,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED &&
         ActivityCompat.checkSelfPermission(
             context,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     ) {
         return true
@@ -30,11 +32,11 @@ fun checkPermissions(context: Activity): Boolean {
 }
 
 fun requestPermissionsWeather(activity: Activity) {
-    ActivityCompat.requestPermissions(
+    requestPermissions(
         activity,
         arrayOf(
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
         ),
         PERMISSION_ID
     )

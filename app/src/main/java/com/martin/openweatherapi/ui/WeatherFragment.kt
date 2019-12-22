@@ -2,7 +2,6 @@ package com.martin.openweatherapi.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -20,7 +19,10 @@ import com.google.android.gms.location.*
 import com.martin.openweatherapi.R
 import com.martin.openweatherapi.databinding.WeatherFragmentBinding
 import com.martin.openweatherapi.di.Injectable
-import com.martin.openweatherapi.util.*
+import com.martin.openweatherapi.util.checkPermissions
+import com.martin.openweatherapi.util.isConnected
+import com.martin.openweatherapi.util.isLocationEnabled
+import com.martin.openweatherapi.util.requestPermissionsWeather
 import kotlinx.android.synthetic.main.weather_fragment.*
 import javax.inject.Inject
 
@@ -40,8 +42,6 @@ class WeatherFragment : Fragment(), Injectable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         dataBinding =
             DataBindingUtil.inflate(
                 inflater,
@@ -59,6 +59,9 @@ class WeatherFragment : Fragment(), Injectable {
         dataBinding.viewModel = weatherViewModel
 
 
+        /**
+         * init the location service client
+         */
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         getLastLocation()
@@ -110,6 +113,10 @@ class WeatherFragment : Fragment(), Injectable {
 
     }
 
+
+    /**
+     * request for a new location based on high accuracy
+     */
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
         var mLocationRequest = LocationRequest()
@@ -117,7 +124,6 @@ class WeatherFragment : Fragment(), Injectable {
         mLocationRequest.interval = 0
         mLocationRequest.fastestInterval = 0
         mLocationRequest.numUpdates = 1
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         mFusedLocationClient!!.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
@@ -144,8 +150,6 @@ class WeatherFragment : Fragment(), Injectable {
     private fun getLastLocation() {
         if (checkPermissions(requireActivity())) {
             if (isLocationEnabled(requireActivity())) {
-
-
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     var location: Location? = task.result
                     if (location == null) {
@@ -173,16 +177,12 @@ class WeatherFragment : Fragment(), Injectable {
         }
     }
 
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSION_ID) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                getLastLocation()
-            }
-        }
+    override fun onResume() {
+        super.onResume()
+        getLastLocation()
     }
+
 }
+
+
+
