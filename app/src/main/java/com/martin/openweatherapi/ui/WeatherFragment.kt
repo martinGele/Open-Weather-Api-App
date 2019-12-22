@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.martin.openweatherapi.R
+import com.martin.openweatherapi.databinding.WeatherFragmentBinding
 import com.martin.openweatherapi.di.Injectable
 import com.martin.openweatherapi.util.isConnected
 import com.martin.openweatherapi.vo.Weather
@@ -17,6 +19,9 @@ import kotlinx.android.synthetic.main.weather_fragment.*
 import javax.inject.Inject
 
 class WeatherFragment : Fragment(), Injectable {
+
+
+    lateinit var dataBinding: WeatherFragmentBinding
 
 
     @Inject
@@ -31,12 +36,24 @@ class WeatherFragment : Fragment(), Injectable {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.weather_fragment, container, false)
+
+
+
+        dataBinding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.weather_fragment,
+                container,
+                false
+            )
+        return dataBinding.root
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        dataBinding.lifecycleOwner = this
+        dataBinding.viewModel = weatherViewModel
 
         if (context!!.isConnected) {
             weatherViewModel.showDataByLocation()
@@ -46,8 +63,6 @@ class WeatherFragment : Fragment(), Injectable {
             noInternet.visibility = View.VISIBLE
         }
         weatherViewModel.weatherLiveData.observe(this, weatherDataObserver)
-
-
         weatherViewModel.loading.observe(this, loadingLiveDataObserver)
     }
 
