@@ -31,7 +31,7 @@ class WeatherViewModel @Inject constructor(private val weatherApiService: Weathe
 
     fun getWeatherByLocation(location: String?) {
         disposable.add(
-            weatherApiService.getWeatherCity(location!!, API_KEY)
+            weatherApiService.getWeatherCity(location!!,"metric", API_KEY)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Weather>() {
@@ -62,7 +62,7 @@ class WeatherViewModel @Inject constructor(private val weatherApiService: Weathe
 
     fun showWeatheGeoLocation(lat:String?,lon:String?){
         disposable.addAll(
-             weatherApiService.getWeatherGeo(lat!!,lon!!, API_KEY)
+             weatherApiService.getWeatherGeo(lat!!,lon!!,"metric", API_KEY)
                  .subscribeOn(Schedulers.newThread())
                  .observeOn(AndroidSchedulers.mainThread())
                  .subscribeWith(object : DisposableSingleObserver<Weather>(){

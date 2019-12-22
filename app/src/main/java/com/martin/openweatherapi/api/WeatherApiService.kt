@@ -10,9 +10,17 @@ interface WeatherApiService {
 
 
     @GET("/data/2.5/weather?")
-    fun getWeatherGeo(@Query("lat") lat: String, @Query("lon") lon: String, @Query("appid") id: String): Single<Weather>
+    fun getWeatherGeo(
+        @Query("lat") lat: String
+        , @Query("lon") lon: String,
+        @Query("units") units: String,
+        @Query("appid") id: String
+    ): Single<Weather>
 
     @GET("/data/2.5/weather?")
-    fun getWeatherCity(@Query("q") city: String, @Query("appid") id: String): Single<Weather>
+    fun getWeatherCity(
+        @Query("q") city: String, @Query("units") units: String,
+        @Query("appid") id: String
+    ): Single<Weather>
 
 }

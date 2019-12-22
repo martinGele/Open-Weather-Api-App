@@ -3,7 +3,6 @@ package com.martin.openweatherapi.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.martin.one.di.ViewModelKey
 import com.martin.openweatherapi.ui.WeatherViewModel
 import com.martin.openweatherapi.viewmodel.ViewModelFactory
 import dagger.Binds
