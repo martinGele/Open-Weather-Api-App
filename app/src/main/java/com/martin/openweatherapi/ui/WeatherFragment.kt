@@ -1,7 +1,6 @@
 package com.martin.openweatherapi.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.martin.openweatherapi.R
 import com.martin.openweatherapi.databinding.WeatherFragmentBinding
 import com.martin.openweatherapi.di.Injectable
 import com.martin.openweatherapi.util.isConnected
-import com.martin.openweatherapi.vo.Weather
 import kotlinx.android.synthetic.main.weather_fragment.*
 import javax.inject.Inject
 
@@ -38,7 +36,6 @@ class WeatherFragment : Fragment(), Injectable {
     ): View? {
 
 
-
         dataBinding =
             DataBindingUtil.inflate(
                 inflater,
@@ -55,22 +52,44 @@ class WeatherFragment : Fragment(), Injectable {
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = weatherViewModel
 
-        if (context!!.isConnected) {
-            weatherViewModel.showDataByLocation()
-            progressBar.visibility = View.VISIBLE
-        } else {
 
-            noInternet.visibility = View.VISIBLE
-        }
-        weatherViewModel.weatherLiveData.observe(this, weatherDataObserver)
+        search_view.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(city: String?): Boolean {
+
+                if (context!!.isConnected) {
+                    weatherViewModel.showDataByLocation(city)
+                    progressBar.visibility = View.VISIBLE
+                } else {
+                    noInternet.visibility = View.VISIBLE
+                }
+
+                return true
+            }
+
+            override fun onQueryTextChange(city: String?): Boolean {
+
+                return true
+            }
+
+        })
+
+
+
+        weatherViewModel.loadError.observe(this, onErrorLiveDataObserver)
+
         weatherViewModel.loading.observe(this, loadingLiveDataObserver)
+
     }
 
-    private val weatherDataObserver = Observer<Weather> { it ->
+    private val onErrorLiveDataObserver = Observer<Boolean> { it ->
 
-        Log.d("GetA", it.base)
+
+        no_city.visibility = if (it) View.VISIBLE else View.GONE
+
+
     }
-
     private val loadingLiveDataObserver = Observer<Boolean> { isLoading ->
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 

@@ -23,15 +23,17 @@ class WeatherViewModel @Inject constructor(private val weatherApiService: Weathe
     private val disposable = CompositeDisposable()
 
 
-    fun showDataByLocation() {
+    fun showDataByLocation(location:String?) {
         loading.value = true
-        getWeatherByLocation()
+
+
+        getWeatherByLocation(location)
     }
 
 
-    fun getWeatherByLocation() {
+    fun getWeatherByLocation(location:String?) {
         disposable.add(
-            weatherApiService.getWeatherCity("Skopje", API_KEY)
+            weatherApiService.getWeatherCity(location!!, API_KEY)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Weather>() {

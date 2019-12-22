@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OpenWeatherApi</string>
+    <string name="no_city">No City by that name</string>
+    <string name="enter_city">Enter City...</string>
 </resources>
