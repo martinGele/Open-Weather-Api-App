@@ -2,6 +2,7 @@ package com.martin.openweatherapi.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -72,6 +73,7 @@ class WeatherFragment : Fragment(), Injectable {
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(city: String?): Boolean {
+                search_view.clearFocus()
                 if (context!!.isConnected) {
                     weatherViewModel.showDataByLocation(city)
                     progressBar.visibility = View.VISIBLE
@@ -173,8 +175,24 @@ class WeatherFragment : Fragment(), Injectable {
                 startActivity(intent)
             }
         } else {
+
+            //TODO don't ask again not handled properly the app is getting in a loop for requests
             requestPermissionsWeather(requireActivity())
         }
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            getLastLocation()
+        }
+
     }
 
     override fun onResume() {

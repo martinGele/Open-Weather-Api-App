@@ -28,6 +28,7 @@ fun checkPermissions(context: Context): Boolean {
     ) {
         return true
     }
+
     return false
 }
 
