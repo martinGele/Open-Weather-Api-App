@@ -7,6 +7,3 @@ and in the search bar, you can enter the location of any city with current live 
 MVVM, data binding and Clean Architecture, means that there is a good separation of concerns and this architecture can be used for building
 bigger apps.
 
- - RxJava
- - Gson
- - MVVm
