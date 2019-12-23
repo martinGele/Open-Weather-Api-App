@@ -73,6 +73,39 @@ fun TextView.setTemp(temp: Double?) {
         text = ""
 
     }else {
-        text = "$getText°C"
+        text = "temp: $getText°C"
+    }
+}
+
+@BindingAdapter("android:loadHumidity")
+fun loadHumidity(view: TextView,humidity:Int){
+    view.setHumidity(humidity)
+}
+
+fun TextView.setHumidity(temp: Int?) {
+    val getText: String = temp.toString()
+    if (getText == "0"){
+        text = ""
+
+    }else {
+        text = "humidity: $getText"
+    }
+}
+
+@BindingAdapter("android:loadPressure")
+fun loadPressure(view: TextView,pressure:Int){
+    view.setPressure(pressure)
+}
+
+
+
+fun TextView.setPressure(pressure:Int){
+
+    val getText: String = pressure.toString()
+    if (getText == "0"){
+        text = ""
+
+    }else {
+        text = "pressure: $getText"
     }
 }
